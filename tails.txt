@@ -1,0 +1,18 @@
+#fetch the usb image
+
+$ wget --continue http://dl.amnesia.boum.org/tails/stable/tails-amd64-5.3.1/tails-amd64-5.3.1.img
+
+#install tails using dd
+
+$ ls -l /dev/sd?
+
+#plug in usb to be flashed
+
+$ ls -l /dev/sd?
+
+#external device appears as a new device in the list
+#take note of the device name, eventually grab this with a shell script
+#if line is the location of the tails img
+#of line is the device to be flashed
+
+$ sudo dd if=/home/user/tails-amd.64-5.3.1/tails-amd64-5.3.1.img of=/dev/sda bs=16M oflag=direct status=progress
