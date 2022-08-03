@@ -15,4 +15,4 @@ $ ls -l /dev/sd?
 #if line is the location of the tails img
 #of line is the device to be flashed
 
-$ sudo dd if=/home/user/tails-amd.64-5.3.1/tails-amd64-5.3.1.img of=/dev/sda bs=16M oflag=direct status=progress
+$ sudo dd if=tails-amd64-5.3.1.img of=/dev/sda bs=16M oflag=direct status=progress
