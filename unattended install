@@ -1,4 +1,4 @@
-NEED TO DO: 
+TO DO/Consider: 
 -rename isolinux/ and isolinux.cfg to syslinux/ and syslinux.cfg
 -format the usb (SD card) and give it a bootable flag with fdisk, creating proper filesystem and dd-ing
 -consider just using mkusb????
@@ -9,47 +9,45 @@ NEED TO DO:
 
 #step 1: download the iso
 
-wget https://releases.ubuntu.com/jammy/ubuntu-22.04-desktop-amd64.iso
+$ wget https://releases.ubuntu.com/jammy/ubuntu-22.04-desktop-amd64.iso
 
 #step 2: mount the ubuntu ISO to copy contents to another directory and edit files where appropriate
 
-sudio mkdir -p /mnt/iso
-sudo mount -o loop ubuntu-22.04-desktop-amd64.iso /mnt/iso
+$ sudo mkdir -p /mnt/iso
+$ sudo mount -o loop ubuntu-22.04-desktop-amd64.iso /mnt/iso
 
 #step 3: copy iso files to another dir for editing
 
-mkdir -p /opt/ubuntuiso
-cp -rT /mnt/iso /opt/ubuntuiso
+$ mkdir -p /opt/ubuntuiso
+$ cp -rT /mnt/iso /opt/ubuntuiso
 
-#step 4: edit the /opt/ubuntuiso/isolinux/txt.cfg file with the following info (note below the original items in the config file are commented out). Pay attention to the append line which designates a preseed file
+#step 4: replace the /opt/ubuntuiso/boot/grub/grub.cfg file with the following. edit preseed & kickstart filename appropriately
 
-#default live
-#label live
-#  menu label ^Try Ubuntu without installing
-#  kernel /casper/vmlinuz.efi
-#  append  file=/cdrom/preseed/ubuntu.seed boot=casper initrd=/casper/initrd.lz quiet splash ---
-#label live-install
-#  menu label ^Install Ubuntu
-#  kernel /casper/vmlinuz.efi
-#  append  file=/cdrom/preseed/ubuntu.seed boot=casper only-ubiquity initrd=/casper/initrd.lz quiet splash ---
-#label check
-#  menu label ^Check disc for defects
-#  kernel /casper/vmlinuz.efi
-#  append  boot=casper integrity-check initrd=/casper/initrd.lz quiet splash ---
-#label memtest
-#  menu label Test ^memory
-#  kernel /install/mt86plus
-#label hd 
-#  menu label ^Boot from first hard disk
-#  localboot 0x80
+$ cd /opt/ubuntuiso/boot/grub
+$ sudo vim grub.cfg
 
-default live-install
-label live-install
-  menu label ^Install Ubuntu
-  kernel /casper/vmlinuz.efi
-  append  file=/cdrom/ks.preseed auto=true priority=critical debian-installer/locale=en_US keyboard-configuration/layoutcode=us ubiquity/reboot=true languagechooser/language-name=English countrychooser/shortlist=US localechooser/supported-locales=en_US.UTF-8 boot=casper automatic-ubiquity initrd=/casper/initrd.lz quiet splash noprompt noshell ---
+#start grub.cfg
+
+if loadfont /boot/grub/font.pf2 ; then
+    set gfxmode=auto
+    insmod efi_gop
+    insmod efi_uga
+    insmod gfxterm
+    terminal_output gfxterm
+fi
+
+set menu_color_normal=white/light-blue
+set menu_color_highlight=light-blue/light-gray
+set timeout=10
+set default=0
+
+menuentry "Automatically Install Ubuntu with Custom Config" {
+    set gfxpayload=keep
+    linux   /install/vmlinuz  file=/opt/ubuntuiso/preseed/ubuntu.seed quiet ks=opt/ubuntuiso/preseed/ks.cfg preseed/file=/opt/ubuntuiso/preseed/ks.preseed --
+    initrd  /install/initrd.gz
+}
 	
-	
+#end grub.cfg	
 	
 #step 5: create the preseed file. It should be named ks.preseed as per the designation in step 4 and it should be in the top level dir of the ISO (/opt/ubuntuiso). Any custom command to run after installation should use 
 $ubiquity ubiquity/success_command string 
@@ -125,6 +123,3 @@ d-i grub-installer/bootdev string /dev/sda
 #create a new ISO from the /opt/ubuntuiso/ dir 
 
 mkisofs -D -r -V ATTENDLESS_UBUNTU -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /opt/autoinstall.iso /opt/ubuntuiso
-
-
-
