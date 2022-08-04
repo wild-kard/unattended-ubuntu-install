@@ -140,6 +140,9 @@ d-i grub-installer/bootdev string /dev/sda
 #end of preseed
 
 
-#create a new ISO from the /opt/ubuntuiso/ dir 
+#create a new ISO from the /opt/ubuntuiso/ dir The below is likely a deprecated example given that isolinux is no longer used
 
-mkisofs -D -r -V ATTENDLESS_UBUNTU -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /opt/autoinstall.iso /opt/ubuntuiso
+$ mkisofs -D -r -V ATTENDLESS_UBUNTU -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /opt/autoinstall.iso /opt/ubuntuiso
+
+#dd the newly created iso to the target device these are just an example source and target and eventually bash script should find this dynamically
+$ dd if=/opt/ubuntuiso of=/dev/sda
