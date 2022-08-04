@@ -3,6 +3,17 @@ TO DO/Consider:
 -format the usb (SD card) and give it a bootable flag with fdisk, creating proper filesystem and dd-ing
 -consider just using mkusb????
 
+Expected high level flow:
+    1. clone down iso
+    2. mount iso and copy to a new working dir
+    3. edit the iso grub.cfg
+    4. add a custom preseed file to the boot directory
+    5. make the new iso
+    6. fdisk the usb/sd if necessary
+    7. create the right filesystems we need
+    8. dd-ing the iso to the sd/usb
+    9. repeat 6-8 for all 7 SDs
+
 
 
 
