@@ -50,12 +50,12 @@ menuentry "Automatically Install Ubuntu with Custom Config" {
 #end grub.cfg	
 	
 #step 5: create the preseed file. It should be named ks.preseed as per the designation in step 4 and it should be in the top level dir of the ISO (/opt/ubuntuiso). Any custom command to run after installation should use 
-$ubiquity ubiquity/success_command string 
-followed by the command 
-strings below with ':\' and '/target' change anything pertaining to the new system
-also need to add user/root password
-designate user's groups if applicable
-change the success_command 
+# $ubiquity ubiquity/success_command string 
+# followed by the command 
+# strings below with ':\' and '/target' change anything pertaining to the new system
+# also need to add user/root password
+# designate users groups if applicable
+# change the success_command 
 
 ### Partitioning
 d-i partman-auto/disk string /dev/sda
