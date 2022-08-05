@@ -140,9 +140,25 @@ d-i grub-installer/bootdev string /dev/sda
 #end of preseed
 
 
-#create a new ISO from the /opt/ubuntuiso/ dir The below is likely a deprecated example given that isolinux is no longer used
+#step 6: create a new ISO from the /opt/ubuntuiso/ dir The below is likely a deprecated example given that isolinux is no longer used
 
-$ mkisofs -D -r -V ATTENDLESS_UBUNTU -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /opt/autoinstall.iso /opt/ubuntuiso
+#$ mkisofs -D -r -V ATTENDLESS_UBUNTU -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /opt/autoinstall.iso /opt/ubuntuiso
+#no idea what all of the above flags do, i just ran...
+$ sudo mkisofs unattended.iso /opt/ubuntuiso
 
-#dd the newly created iso to the target device these are just an example source and target and eventually bash script should find this dynamically
-$ dd if=/opt/ubuntuiso of=/dev/sda
+
+#step 7: find the current drives available
+
+$ ls -l /dev/sd?
+
+#7.A: insert SD/USB
+
+#7.B: find the current drive pertaining to the inserted SD/USB, will appear as a new location after running below commmand
+
+$ ls -l /dev/sd?
+
+
+#step 8: dd the newly created iso to the target device these are just an example source and target and eventually bash script should find this dynamically
+$ dd if=unattended.iso |pv | sudo dd of=/dev/sdb
+
+#above pv is a pipe viewer app that will show current speed and transfer volume, sudo apt get-install pv 
