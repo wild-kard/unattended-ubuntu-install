@@ -161,4 +161,9 @@ $ ls -l /dev/sd?
 #step 8: dd the newly created iso to the target device these are just an example source and target and eventually bash script should find this dynamically
 $ dd if=unattended.iso |pv | sudo dd of=/dev/sdb
 
-#above pv is a pipe viewer app that will show current speed and transfer volume, sudo apt get-install pv 
+#above pv is a pipe viewer app that will show current speed and transfer volume,
+$ sudo apt get-install pv 
+
+
+#the above was a complete breakdown of my first attempt at modifying and flashing a usb. USB would not boot. BIOS did not recognize device as bootable. Very little feedback from terminal or host machine for debug. Likely a misconfiguration of the iso?
+
